@@ -54,12 +54,11 @@ npx --yes @tauri-apps/cli@2 signer generate -w "$HOME\.zoo-release\zoo.key"
 **設定**：
 
 ```powershell
-# 1. 從 KeePassXC 把私鑰附加檔案匯出到暫存資料夾，例如 $env:TEMP\zoo.key
-uv run scripts\setup_secrets.py --keepass <資料庫.kdbx>   # 直接讀 KeePassXC，只詢問主密碼
-# 或用私鑰檔：uv run scripts\setup_secrets.py --key-file "$env:TEMP\zoo.key"
-# 2. 依提示貼上私鑰密碼（沒有已登入的認證時也會詢問 token）（輸入不會顯示），設定到 scripts/repos.txt 列出的每個 repo
-Remove-Item "$env:TEMP\zoo.key"
-# 只設定一個 repo：加上 --repo zoosewu/z-overlay
+# 直接讀 KeePassXC（需要 keepassxc-cli 在 PATH）：只詢問主密碼，私鑰取自項目附件、密碼取自密碼欄
+uv run scripts\setup_secrets.py --keepass <資料庫.kdbx>
+# 項目或附件名稱不同時：--entry "<項目>" --attachment <附件檔名>
+# 只設定一個 repo：--repo zoosewu/z-overlay
+# 沒有已登入的 GitHub 認證時會再詢問 token；輸入都不會顯示
 ```
 
 也可以在網頁手動設定：repo 的 Settings → Secrets and variables → Actions → New repository secret。
