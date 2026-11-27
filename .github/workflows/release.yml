@@ -18,6 +18,10 @@ on:
         description: 接在 Release 說明後面的固定文字檔（不存在就略過）
         type: string
         default: .github/release-notes.md
+      notes-language:
+        description: Release 說明的語言（zh-TW 或 en），專案沒有自己的 cliff.toml 時決定用哪一份預設設定
+        type: string
+        default: zh-TW
       publish:
         description: false 時只建草稿不發布（測試用）
         type: boolean
@@ -49,6 +53,7 @@ jobs:
       PLATFORMS: ${{ inputs.platforms }}
       NAME: ${{ inputs.name }}
       FOOTER: ${{ inputs.notes-footer }}
+      NOTES_LANGUAGE: ${{ inputs.notes-language }}
     steps:
       - name: 檢查 tag
         run: |
@@ -122,7 +127,10 @@ jobs:
       - name: Release 說明設定
         id: cliff
         run: |
-          if [[ -f cliff.toml ]]; then echo "config=cliff.toml" >> "$GITHUB_OUTPUT"; else echo "config=.zoo-release/cliff.toml" >> "$GITHUB_OUTPUT"; fi
+          if [[ -f cliff.toml ]]; then config=cliff.toml
+          elif [[ "$NOTES_LANGUAGE" == "en" ]]; then config=.zoo-release/cliff.en.toml
+          else config=.zoo-release/cliff.toml; fi
+          echo "config=$config" >> "$GITHUB_OUTPUT"
           # 正式版：上一個正式版到這個 tag；預先發行版：上一個正式版之後的全部變更
           if [[ "$PRERELEASE" == "true" ]]; then
             echo "args=--unreleased --tag $TAG --strip all" >> "$GITHUB_OUTPUT"
@@ -145,9 +153,9 @@ jobs:
           touch "$changes"
           if [[ -z "$(tr -d '[:space:]' < "$changes")" ]]; then
             if git describe --tags --abbrev=0 --match 'v[0-9]*.[0-9]*.[0-9]*' --exclude '*-*' "$TAG^" >/dev/null 2>&1; then
-              echo "這個版本沒有列出的變更。" > "$changes"
+              if [[ "$NOTES_LANGUAGE" == "en" ]]; then echo "No listed changes in this version." > "$changes"; else echo "這個版本沒有列出的變更。" > "$changes"; fi
             else
-              echo "第一個公開版本。" > "$changes"
+              if [[ "$NOTES_LANGUAGE" == "en" ]]; then echo "First public release." > "$changes"; else echo "第一個公開版本。" > "$changes"; fi
             fi
           fi
           notes="$RUNNER_TEMP/notes.md"

@@ -85,7 +85,7 @@ jobs:
 3. 每個檔案產生 `<檔名>.sha256`。
 4. `platforms` 指定的更新檔沒有 `.sig` 的話，用共用金鑰簽章（見 [SIGNING.md](SIGNING.md)）。
 5. 產生 `latest.json`（格式見 [UPDATE.md](UPDATE.md)）。
-6. Release 說明：git-cliff 依 `cliff.toml` 產生（專案沒有 `cliff.toml` 就用 zoo-release 的預設），後面接 `.github/release-notes.md`（安裝說明等固定文字，可省略）。
+6. Release 說明：git-cliff 依 `cliff.toml` 產生（專案沒有 `cliff.toml` 就用 zoo-release 的預設：`cliff.toml` 中文、`cliff.en.toml` 英文），後面接 `.github/release-notes.md`（安裝說明等固定文字，可省略）。
 7. 先建草稿、上傳全部檔案，最後才發布並標成 latest，**已安裝的 app 不會看到上傳到一半的 Release**。
 
 ### `release.yml` 的輸入
@@ -95,6 +95,7 @@ jobs:
 | `name` | | Release 標題的前綴，標題為 `<name> <版本>`；省略時標題為 tag |
 | `platforms` | | 更新檔對照：`{"<平台>": "<檔名或萬用字元>"}`。平台鍵見 UPDATE.md。省略＝沒有可自動更新的檔案（Docker） |
 | `notes-footer` | | Release 說明後面接的固定文字檔，預設 `.github/release-notes.md`（不存在就略過） |
+| `notes-language` | | `zh-TW`（預設）或 `en`：專案沒有自己的 `cliff.toml` 時，Release 說明的分組標題用哪種語言 |
 | `publish` | | `false` 時只建草稿不發布，用來測試，預設 `true` |
 | `zoo-release-ref` | | 讀取 zoo-release 腳本與預設 `cliff.toml` 的版本，預設 `v1` |
 

@@ -19,7 +19,7 @@ zoosewu 各專案共用的**發布流程、更新機制與 UI 規範**。
 | `.github/workflows/tauri-build.yml` | 可重用：Tauri 各平台建置 |
 | `.github/workflows/docker-image.yml` | 可重用：Docker 映像推到 ghcr.io |
 | `.github/workflows/contributor-license.yml` | 可重用：檢查 PR 作者是否同意貢獻授權 |
-| `cliff.toml` | 預設的 Release 說明格式（git-cliff） |
+| `cliff.toml`、`cliff.en.toml` | 預設的 Release 說明格式（git-cliff，中文／英文） |
 | `crates/zoo-update` | Rust：`latest.json`、版本比較、提示規則、簽章與 sha256 驗證 |
 | `scripts/manifest.py` | 產生 `latest.json` |
 | `scripts/setup-secrets.ps1` | 把簽章金鑰設定到各 repo |
