@@ -7,13 +7,16 @@
 直接呼叫 GitHub REST API，不需要 gh。設定兩個 secret：
   ZOO_SIGNING_KEY       私鑰檔的內容
   ZOO_SIGNING_PASSWORD  私鑰的密碼
+私鑰與密碼的來源（擇一）：
+  --keepass   直接讀 KeePassXC 資料庫（keepassxc-cli）：密碼欄＋私鑰附件，只詢問主密碼
+  --key-file  私鑰檔，執行時詢問私鑰密碼
 GitHub 權限依序用：環境變數 GITHUB_TOKEN → git 已登入的認證（Git Credential Manager）→ 執行時詢問 token。
-私鑰密碼在執行時詢問（輸入不顯示），不會出現在指令列或歷史紀錄。
+輸入都不會顯示，也不會出現在指令列或歷史紀錄。
 
 用 uv 執行（自動準備 PyNaCl，不會裝進系統的 Python）：
 
-  uv run scripts/setup_secrets.py --key-file "$env:TEMP\\zoo.key"
-  uv run scripts/setup_secrets.py --key-file "$env:TEMP\\zoo.key" --repo zoosewu/z-overlay
+  uv run scripts/setup_secrets.py --keepass D:/path/zoo.kdbx
+  uv run scripts/setup_secrets.py --key-file D:/path/zoo.key --repo zoosewu/z-overlay
 """
 
 import argparse
@@ -21,6 +24,7 @@ import base64
 import getpass
 import json
 import os
+import shutil
 import subprocess
 import sys
 import urllib.error
@@ -70,6 +74,26 @@ def git_credential_token():
     return None
 
 
+def keepass_read(db, entry, attachment, master, cli="keepassxc-cli"):
+    """用 keepassxc-cli 讀出（私鑰附件內容, 密碼欄）。主密碼從標準輸入傳入，不出現在指令列。"""
+
+    def run(*args):
+        r = subprocess.run([cli, *args], input=(master + "\n").encode(), capture_output=True)
+        if r.returncode != 0:
+            msg = r.stderr.decode(errors="replace").strip() or "主密碼錯誤，或資料庫無法開啟"
+            sys.exit(f"讀取 KeePassXC 失敗：{msg}")
+        return r.stdout.decode("utf-8")
+
+    key = run("attachment-export", "-q", "--stdout", db, entry, attachment).strip()
+    password = run("show", "-q", "-s", "-a", "Password", db, entry)
+    # 只去掉 CLI 加上的換行，密碼本身的空白保留
+    if password.endswith("\n"):
+        password = password[:-1]
+    if password.endswith("\r"):
+        password = password[:-1]
+    return key, password
+
+
 def encrypt(public_key, value):
     from nacl.public import PublicKey, SealedBox
 
@@ -79,7 +103,11 @@ def encrypt(public_key, value):
 
 def main():
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    p.add_argument("--key-file", required=True, help="私鑰檔（從 KeePassXC 匯出）")
+    src = p.add_mutually_exclusive_group(required=True)
+    src.add_argument("--keepass", metavar="KDBX", help="KeePassXC 資料庫（.kdbx）")
+    src.add_argument("--key-file", help="私鑰檔")
+    p.add_argument("--entry", default="zoo-release 簽章金鑰", help="KeePassXC 的項目，預設「%(default)s」")
+    p.add_argument("--attachment", default="zoo-downloader.key", help="項目裡的私鑰附件，預設 %(default)s")
     p.add_argument("--repo", help="只設定這個 repo（owner/name）；省略時設定 repos.txt 的全部")
     args = p.parse_args()
 
@@ -88,12 +116,20 @@ def main():
     except ImportError:
         sys.exit("缺少 PyNaCl：改用 uv run scripts/setup_secrets.py 執行")
 
-    if not os.path.isfile(args.key_file):
-        sys.exit(f"找不到私鑰檔：{os.path.abspath(args.key_file)}")
-    with open(args.key_file, encoding="utf-8") as f:
-        key = f.read().strip()
+    path = args.keepass or args.key_file
+    if not os.path.isfile(path):
+        sys.exit(f"找不到檔案：{os.path.abspath(path)}")
+    if args.keepass:
+        if not shutil.which("keepassxc-cli"):
+            sys.exit("找不到 keepassxc-cli：把 KeePassXC 的安裝資料夾加進 PATH")
+        master = getpass.getpass("KeePassXC 主密碼：")
+        key, password = keepass_read(args.keepass, args.entry, args.attachment, master)
+    else:
+        with open(args.key_file, encoding="utf-8") as f:
+            key = f.read().strip()
+        password = getpass.getpass("私鑰密碼：")
     if not key:
-        sys.exit(f"私鑰檔是空的：{args.key_file}")
+        sys.exit("私鑰是空的")
 
     repos = [args.repo] if args.repo else load_repos(os.path.join(os.path.dirname(__file__), "repos.txt"))
     token = os.environ.get("GITHUB_TOKEN") or git_credential_token()
@@ -101,7 +137,6 @@ def main():
         print("使用這台電腦已登入的 GitHub 權限")
     else:
         token = getpass.getpass("GitHub token（Secrets 讀寫權限）：").strip()
-    password = getpass.getpass("私鑰密碼：")
 
     secrets = {"ZOO_SIGNING_KEY": key, "ZOO_SIGNING_PASSWORD": password}
     failed = []
