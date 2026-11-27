@@ -1,0 +1,3 @@
+# 測試資料保持原樣（簽章與 JSON 不做換行轉換）
+crates/zoo-update/tests/fixtures/** -text
+*.sh text eol=lf
