@@ -1,4 +1,4 @@
-# 使用 zoo-release 簽章的 repo（setup-secrets.ps1 與 tools/audit.py 共用）
+# 使用 zoo-release 簽章的 repo（setup_secrets.py 與 tools/audit.py 共用）
 # 格式：<repo>  <本機路徑（相對 zoo-release 的上層資料夾；沒有就寫 ->）>  <類型>
 zoosewu/zing-explore     folder           rust
 zoosewu/z-overlay        zOverlay         rust

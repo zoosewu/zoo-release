@@ -41,15 +41,27 @@ npx --yes @tauri-apps/cli@2 signer generate -w "$HOME\.zoo-release\zoo.key"
 
 ## 3. 設定到各 repo
 
-個人帳號沒有跨 repo 共用的 secret，所以用腳本一次設定（需要 [GitHub CLI](https://cli.github.com/) 並已登入）：
+個人帳號沒有跨 repo 共用的 secret，所以用腳本透過 GitHub REST API 一次設定（不需要 gh）。
+
+**準備**（第一次）：
+
+1. `py -m pip install pynacl`（GitHub 要求 secret 先用 libsodium 加密）。
+2. 建立 token：GitHub → Settings → Developer settings → Fine-grained tokens → Generate new token
+   - Repository access：Only select repositories，選 `scripts/repos.txt` 列出的 repo
+   - Permissions：**Secrets → Read and write**
+   - 期限設短（例如 7 天）；token 也存進 KeePassXC，或用完就刪。
+
+**設定**：
 
 ```powershell
 # 1. 從 KeePassXC 把私鑰附加檔案匯出到暫存資料夾，例如 $env:TEMP\zoo.key
-.\scripts\setup-secrets.ps1 -KeyFile "$env:TEMP\zoo.key"
-# 2. 依提示貼上密碼（從 KeePassXC 複製），設定到 scripts/repos.txt 列出的每個 repo
+py scripts\setup_secrets.py --key-file "$env:TEMP\zoo.key"
+# 2. 依提示貼上 token 與私鑰密碼（輸入不會顯示），設定到 scripts/repos.txt 列出的每個 repo
 Remove-Item "$env:TEMP\zoo.key"
-# 只設定一個 repo：加上 -Repo zoosewu/z-overlay
+# 只設定一個 repo：加上 --repo zoosewu/z-overlay
 ```
+
+也可以在網頁手動設定：repo 的 Settings → Secrets and variables → Actions → New repository secret。
 
 新增專案時把 repo 加進 `scripts/repos.txt` 再執行一次。
 

@@ -108,7 +108,7 @@ jobs:
           for f in "${assets[@]}"; do [[ -f "$f.sig" ]] || unsigned+=("$f"); done
           if (( ${#unsigned[@]} == 0 )); then echo "沒有需要簽章的檔案"; exit 0; fi
           if [[ -z "$TAURI_SIGNING_PRIVATE_KEY" ]]; then
-            echo "::error::缺少 secret ZOO_SIGNING_KEY：呼叫端要加上 secrets: inherit，並用 zoo-release 的 scripts/setup-secrets.ps1 設定（docs/SIGNING.md）"
+            echo "::error::缺少 secret ZOO_SIGNING_KEY：呼叫端要加上 secrets: inherit，並依 zoo-release 的 docs/SIGNING.md 設定"
             exit 1
           fi
           for f in "${unsigned[@]}"; do

@@ -46,4 +46,4 @@ cd crates/zoo-update && cargo clippy --all-targets -- -D warnings && cargo test
 ## 簽章金鑰
 
 沿用 zoo-downloader 的金鑰（使用者 2026-11-27 確認保有私鑰與密碼），保存在 KeePassXC（docs/SIGNING.md）。
-私鑰與密碼只由使用者處理：需要設定 secrets 時請使用者執行 `scripts/setup-secrets.ps1`，不要經手私鑰或密碼。
+私鑰與密碼只由使用者處理：需要設定 secrets 時請使用者執行 `py scripts/setup_secrets.py`，不要經手私鑰或密碼。

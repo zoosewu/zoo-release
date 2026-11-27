@@ -22,7 +22,7 @@ zoosewu 各專案共用的**發布流程、更新機制與 UI 規範**。
 | `cliff.toml`、`cliff.en.toml` | 預設的 Release 說明格式（git-cliff，中文／英文） |
 | `crates/zoo-update` | Rust：`latest.json`、版本比較、提示規則、簽章與 sha256 驗證 |
 | `scripts/manifest.py` | 產生 `latest.json` |
-| `scripts/setup-secrets.ps1` | 把簽章金鑰設定到各 repo |
+| `scripts/setup_secrets.py` | 把簽章金鑰設定到各 repo（GitHub REST API） |
 | `scripts/repos.txt` | 使用 zoo-release 的 repo 清單 |
 | `tools/audit.py` | 檢查各專案的接入狀態 |
 

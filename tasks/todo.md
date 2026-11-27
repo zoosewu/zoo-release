@@ -19,7 +19,7 @@ zoosewu 各專案共用的發布流程、更新機制與 UI 規範（GitHub：`z
 - [x] .github/workflows/release.yml（共用：sha256、簽章、latest.json、說明、建立 Release）
 - [x] .github/workflows/tauri-build.yml、docker-image.yml
 - [x] crates/zoo-update（Rust：latest.json、版本比較、提示規則、簽章與 sha256 驗證）＋ 測試
-- [x] scripts/setup-secrets.ps1（把簽章金鑰設到各 repo）
+- [x] scripts/setup_secrets.py（把簽章金鑰設到各 repo，用 REST API，不需要 gh）
 - [x] tools/audit.py（各專案接入狀態）
 - [x] CLAUDE.md、README.md
 - [x] 驗證：cargo test、py 測試、workflow YAML 語法
@@ -28,7 +28,7 @@ zoosewu 各專案共用的發布流程、更新機制與 UI 規範（GitHub：`z
 - [x] 授權：zoo-release 與 zoo-update 用 MIT；docs/LICENSING.md（產品 AGPL-3.0-only＋商業授權、函式庫與工具 MIT）；ADOPTION 加入 C 授權；audit 檢查
 - [ ] waypoint 沒有 LICENSE、package.json 是 MIT：改 AGPL 前要使用者確認原作者（I321I）的程式碼權利
 - [x] 沿用 zoo-downloader 的金鑰；保存在 KeePassXC（docs/SIGNING.md）
-- [ ] 使用者安裝 gh 並執行 scripts/setup-secrets.ps1（z-overlay 先設，實測用）
+- [ ] 使用者執行 scripts/setup_secrets.py（z-overlay 先設，實測用）
 - [x] push、建立 v1.0.0 與 v1 tag；v1.1.0（notes-language）、v1.1.1（action 升級到 Node 24）
 - [ ] z-overlay 實測（分支 zoo-release-pilot，publish: false）
   - [x] 第 1 次（沒有 secrets）：建置、artifact、收集檔案正常，在簽章步驟以預期的錯誤訊息停止
