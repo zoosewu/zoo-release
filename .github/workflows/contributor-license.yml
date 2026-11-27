@@ -1,0 +1,43 @@
+# 共用的貢獻授權檢查（docs/LICENSING.md 第 5 節）：PR 說明中的同意勾選行沒有打勾時失敗。
+#   on:
+#     pull_request:
+#       types: [opened, edited, reopened, synchronize]
+#   jobs:
+#     agreement:
+#       uses: zoosewu/zoo-release/.github/workflows/contributor-license.yml@v1
+# repo 擁有者與機器人的 PR 不需要勾選。只讀取事件內容，不 checkout、不需要任何權限或 secret。
+name: contributor-license
+
+on:
+  workflow_call:
+
+permissions: {}
+
+jobs:
+  agreement:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: 檢查同意勾選
+        env:
+          EVENT: ${{ github.event_name }}
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+          AUTHOR_TYPE: ${{ github.event.pull_request.user.type }}
+          OWNER: ${{ github.repository_owner }}
+          BODY: ${{ github.event.pull_request.body }}
+        run: |
+          if [[ "$EVENT" != pull_request* ]]; then
+            echo "::error::只能在 pull_request 事件使用（目前是 $EVENT）"; exit 1
+          fi
+          if [[ "$AUTHOR" == "$OWNER" || "$AUTHOR_TYPE" == "Bot" ]]; then
+            echo "$AUTHOR 是 repo 擁有者或機器人，不需要勾選"; exit 0
+          fi
+          # 勾選行：- [x] …CONTRIBUTING.md…（PR 範本見 docs/LICENSING.md 5.2）
+          if printf '%s\n' "$BODY" | grep -qE '^[[:space:]]*[-*][[:space:]]+\[[xX]\][[:space:]].*CONTRIBUTING\.md'; then
+            echo "$AUTHOR 已同意貢獻授權"; exit 0
+          fi
+          {
+            echo "::error::請在 PR 說明中勾選同意 CONTRIBUTING.md 的貢獻授權後再送出。"
+            echo "::error::Please tick the box agreeing to the contribution license in CONTRIBUTING.md in the PR description."
+          }
+          exit 1

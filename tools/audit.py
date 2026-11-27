@@ -108,6 +108,15 @@ def audit(src, kind: str) -> dict[str, list[str]]:
     readme = "\n".join(src.read(f) or "" for f in files if re.match(r"README(\.[\w-]+)?\.md$", f))
     if not re.search(r"商業授權|commercial licen[cs]e", readme, re.I):
         result["C 授權"].append("README 沒有提到商業授權")
+    # 貢獻授權（docs/LICENSING.md 第 5 節）
+    contributing = src.read("CONTRIBUTING.md") or src.read(".github/CONTRIBUTING.md") or ""
+    if not ("AGPL-3.0" in contributing and re.search(r"商業授權|commercial licen[cs]e", contributing, re.I)):
+        result["C 授權"].append("CONTRIBUTING.md 沒有貢獻授權條款")
+    template = src.read(".github/pull_request_template.md") or src.read("pull_request_template.md") or ""
+    if not re.search(r"^\s*[-*]\s+\[ \]\s.*CONTRIBUTING\.md", template, re.M):
+        result["C 授權"].append("PR 範本沒有同意勾選行")
+    if USES.format("contributor-license.yml") not in workflows:
+        result["C 授權"].append("沒有使用 contributor-license.yml@v1")
 
     # D：CLAUDE.md／AGENTS.md 的版本標記
     versions = []

@@ -43,7 +43,11 @@ zoo-release 是 zoosewu 各專案共用的發布流程、更新機制與 UI 規�
 
 1. `LICENSE` 放對應的全文；套件設定檔的 `license` 填 SPDX。
 2. 產品的 README 加上「授權」段落（含商業授權的說明）。
-3. 產品加上 CONTRIBUTING.md 的授權聲明。
+3. **貢獻授權**（LICENSING.md 第 5 節）：所有發 PR 的人都必須同意。
+   - `CONTRIBUTING.md` 放貢獻授權條款（已有 CONTRIBUTING.md 的話加一節）。
+   - `.github/pull_request_template.md` 加上同意勾選行（已有 PR 範本的話加一行）。
+   - `.github/workflows/contributor-license.yml` 引用 `contributor-license.yml@v1`。
+   - 回報時提醒使用者到 repo 設定把 `contributor-license / agreement` 設為必要檢查。
 4. 授權和原本不同時（例如原本是 MIT），**先回報使用者，不要自行更改**：改授權需要確認所有貢獻者的同意。
 
 ### D. 在本專案的 CLAUDE.md（或 AGENTS.md）加入這段
@@ -57,6 +61,7 @@ zoo-release 是 zoosewu 各專案共用的發布流程、更新機制與 UI 規�
 - commit 使用慣例式提交；推 tag `vX.Y.Z` 發布（docs/RELEASE.md）
 - 更新檢查、提示與安裝（docs/UPDATE.md），新版本橫幅與「關於」頁（docs/UI.md）
 - 授權依 docs/LICENSING.md：產品 AGPL-3.0-only＋商業授權、函式庫與工具 MIT；加入 GPL／AGPL 的相依套件前先問使用者
+- 外部 PR 必須勾選同意 CONTRIBUTING.md 的貢獻授權才能合併；不要合併沒有同意的 PR
 - 修改發布、更新或「關於」頁前先讀對應的規範，不要自行偏離；規範不適用時回報使用者
 - 使用者說「更新 zoo-release 規範」時：讀 docs/ADOPTION.md 的「變更紀錄」，只做從目前版本到最新版本列出的「專案要做的事」，最後把上面標題的版本號改成最新版
 ```

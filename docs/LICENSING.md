@@ -56,18 +56,70 @@ Licensed under [AGPL-3.0](LICENSE). A commercial license is available for use ou
 
 | 項目 | 規定 |
 |---|---|
-| 外部貢獻（PR） | 合併前取得貢獻者同意，讓你能以商業授權再授權那部分。CONTRIBUTING.md 放下面的聲明，PR 範本加一個勾選項 |
+| 外部貢獻（PR） | **所有發 PR 的人都必須同意貢獻授權**（第 5 節），沒有同意的 PR 不合併 |
 | 第三方相依套件 | 優先用 MIT、Apache-2.0、BSD、ISC、Zlib 等寬鬆授權。**GPL、AGPL 的相依套件會讓商業授權版本無法發布**，加入前先問使用者 |
 | 複製別人的程式碼 | 只複製寬鬆授權的，保留原本的著作權聲明 |
 
-CONTRIBUTING.md 的聲明（非正式的法律文件，正式提供商業授權前建議請律師確認）：
+## 5. 貢獻授權（所有 PR 都要同意）
+
+發 PR 的人必須同意：**貢獻以 AGPL-3.0 授權**，並且**同意作者另以其他條款（包括商業授權）提供含這份貢獻的版本**。
+函式庫與工具（MIT）的 repo 只需要同意以 MIT 授權。
+
+以下文字不是正式法律文件，正式提供商業授權前建議請律師確認。
+
+### 5.1 CONTRIBUTING.md
+
+產品：
 
 ```markdown
-## 授權
+## 貢獻授權 / Contribution license
 
-提交貢獻即表示你同意：你的貢獻以本專案的授權（AGPL-3.0）釋出，並同意專案作者另以其他條款（包括商業授權）提供包含你的貢獻的版本。
+發 PR 前請閱讀並同意以下條款，並在 PR 說明中勾選同意。沒有同意的 PR 不會被合併。
+
+1. 你的貢獻以本專案的授權 AGPL-3.0（`AGPL-3.0-only`）釋出。
+2. 你同意專案作者（zoosewu）另以其他條款提供包含你的貢獻的版本，包括商業授權，且不需另外通知或支付費用。
+3. 你有權提交這份貢獻（是你自己寫的，或來源的授權允許以上兩點）。
+
+By opening a pull request you agree that:
+
+1. Your contribution is licensed under this project's license, AGPL-3.0 (`AGPL-3.0-only`).
+2. The project author (zoosewu) may also distribute versions that include your contribution under other terms, including a commercial license, without further notice or payment.
+3. You have the right to submit the contribution (you wrote it, or its source license allows the above).
 ```
 
-## 5. 檢查
+函式庫與工具：
 
-`tools/audit.py` 的「E 授權」檢查產品 repo：`LICENSE` 是 AGPL-3.0、根目錄的套件設定檔是 `AGPL-3.0-only`、README 提到商業授權。
+```markdown
+## 貢獻授權 / Contribution license
+
+你的貢獻以本專案的授權 MIT 釋出。 / Your contribution is licensed under this project's license, MIT.
+```
+
+### 5.2 PR 範本 `.github/pull_request_template.md`
+
+保留勾選行的文字，其他內容照各專案需要：
+
+```markdown
+- [ ] 我已閱讀並同意 CONTRIBUTING.md 的貢獻授權 / I have read and agree to the contribution license in CONTRIBUTING.md
+```
+
+### 5.3 自動檢查 `.github/workflows/contributor-license.yml`
+
+```yaml
+name: contributor-license
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+jobs:
+  agreement:
+    uses: zoosewu/zoo-release/.github/workflows/contributor-license.yml@v1
+```
+
+- PR 說明裡的勾選行沒有打勾時檢查失敗。repo 擁有者與機器人（Dependabot、release-please 等）的 PR 自動通過。
+- 在 repo 設定的分支保護（Settings → Branches）把 `contributor-license / agreement` 設為必要檢查，沒有同意就無法合併。
+- 勾選紀錄留在 PR 上；合併後不要改動 PR 說明。
+
+## 6. 檢查
+
+`tools/audit.py` 的「C 授權」檢查產品 repo：`LICENSE` 是 AGPL-3.0、根目錄的套件設定檔是 `AGPL-3.0-only`、README 提到商業授權、CONTRIBUTING.md 有貢獻授權、PR 範本有勾選行、有使用 `contributor-license.yml`。
+分支保護的設定需要到 GitHub 確認。
