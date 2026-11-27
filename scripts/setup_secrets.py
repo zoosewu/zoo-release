@@ -74,11 +74,12 @@ def git_credential_token():
     return None
 
 
-def keepass_read(db, entry, attachment, master, cli="keepassxc-cli"):
+def keepass_read(db, entry, attachment, master, key_file=None, cli="keepassxc-cli"):
     """用 keepassxc-cli 讀出（私鑰附件內容, 密碼欄）。主密碼從標準輸入傳入，不出現在指令列。"""
 
     def run(*args):
-        r = subprocess.run([cli, *args], input=(master + "\n").encode(), capture_output=True)
+        cmd = [cli, args[0], *(["-k", key_file] if key_file else []), *args[1:]]
+        r = subprocess.run(cmd, input=(master + "\n").encode(), capture_output=True)
         if r.returncode != 0:
             msg = r.stderr.decode(errors="replace").strip() or "主密碼錯誤，或資料庫無法開啟"
             sys.exit(f"讀取 KeePassXC 失敗：{msg}")
@@ -106,6 +107,7 @@ def main():
     src = p.add_mutually_exclusive_group(required=True)
     src.add_argument("--keepass", metavar="KDBX", help="KeePassXC 資料庫（.kdbx）")
     src.add_argument("--key-file", help="私鑰檔")
+    p.add_argument("--keepass-key-file", metavar="KEYX", help="KeePassXC 資料庫的金鑰檔（有設定才需要）")
     p.add_argument("--entry", default="zoo-release 簽章金鑰", help="KeePassXC 的項目，預設「%(default)s」")
     p.add_argument("--attachment", default="zoo-downloader.key", help="項目裡的私鑰附件，預設 %(default)s")
     p.add_argument("--repo", help="只設定這個 repo（owner/name）；省略時設定 repos.txt 的全部")
@@ -123,7 +125,7 @@ def main():
         if not shutil.which("keepassxc-cli"):
             sys.exit("找不到 keepassxc-cli：把 KeePassXC 的安裝資料夾加進 PATH")
         master = getpass.getpass("KeePassXC 主密碼：")
-        key, password = keepass_read(args.keepass, args.entry, args.attachment, master)
+        key, password = keepass_read(args.keepass, args.entry, args.attachment, master, args.keepass_key_file)
     else:
         with open(args.key_file, encoding="utf-8") as f:
             key = f.read().strip()

@@ -56,6 +56,7 @@ npx --yes @tauri-apps/cli@2 signer generate -w "$HOME\.zoo-release\zoo.key"
 ```powershell
 # 直接讀 KeePassXC（需要 keepassxc-cli 在 PATH）：只詢問主密碼，私鑰取自項目附件、密碼取自密碼欄
 uv run scripts\setup_secrets.py --keepass <資料庫.kdbx>
+# 資料庫有金鑰檔時：--keepass-key-file <金鑰檔.keyx>
 # 項目或附件名稱不同時：--entry "<項目>" --attachment <附件檔名>
 # 只設定一個 repo：--repo zoosewu/z-overlay
 # 沒有已登入的 GitHub 認證時會再詢問 token；輸入都不會顯示
