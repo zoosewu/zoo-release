@@ -42,12 +42,6 @@ on:
       ZOO_SIGNING_PASSWORD:
         description: 簽章私鑰的密碼
         required: false
-      TAURI_SIGNING_PRIVATE_KEY:
-        description: 舊名稱，沒有 ZOO_SIGNING_KEY 時使用
-        required: false
-      TAURI_SIGNING_PRIVATE_KEY_PASSWORD:
-        description: 舊名稱，沒有 ZOO_SIGNING_PASSWORD 時使用
-        required: false
 
 permissions:
   contents: read
@@ -113,8 +107,8 @@ jobs:
         id: tauri
         uses: tauri-apps/tauri-action@v1
         env:
-          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.ZOO_SIGNING_KEY || secrets.TAURI_SIGNING_PRIVATE_KEY }}
-          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.ZOO_SIGNING_PASSWORD || secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.ZOO_SIGNING_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.ZOO_SIGNING_PASSWORD }}
         with:
           projectPath: ${{ inputs.project-path }}
           tauriScript: ${{ inputs.package-manager }} tauri

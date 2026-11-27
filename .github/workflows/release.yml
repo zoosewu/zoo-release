@@ -37,12 +37,6 @@ on:
       ZOO_SIGNING_PASSWORD:
         description: 簽章私鑰的密碼
         required: false
-      TAURI_SIGNING_PRIVATE_KEY:
-        description: 舊名稱，沒有 ZOO_SIGNING_KEY 時使用
-        required: false
-      TAURI_SIGNING_PRIVATE_KEY_PASSWORD:
-        description: 舊名稱，沒有 ZOO_SIGNING_PASSWORD 時使用
-        required: false
 
 permissions:
   contents: write
@@ -102,8 +96,8 @@ jobs:
 
       - name: 簽章
         env:
-          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.ZOO_SIGNING_KEY || secrets.TAURI_SIGNING_PRIVATE_KEY }}
-          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.ZOO_SIGNING_PASSWORD || secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.ZOO_SIGNING_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.ZOO_SIGNING_PASSWORD }}
         run: |
           # 先存成變數：platforms 對不到檔案時在這裡就失敗
           list=$(python3 .zoo-release/scripts/manifest.py --repo "$GITHUB_REPOSITORY" --tag "$TAG" \

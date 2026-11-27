@@ -99,7 +99,7 @@ jobs:
 | `publish` | | `false` 時只建草稿不發布，用來測試，預設 `true` |
 | `zoo-release-ref` | | 讀取 zoo-release 腳本與預設 `cliff.toml` 的版本，預設 `v1` |
 
-secrets：`ZOO_SIGNING_KEY`（私鑰檔的內容）、`ZOO_SIGNING_PASSWORD`（用 `secrets: inherit` 傳入）。舊名稱 `TAURI_SIGNING_PRIVATE_KEY`、`TAURI_SIGNING_PRIVATE_KEY_PASSWORD` 仍可使用，新名稱優先。
+secrets：`ZOO_SIGNING_KEY`（私鑰檔的內容）、`ZOO_SIGNING_PASSWORD`（用 `secrets: inherit` 傳入）。
 
 ## 5. Release 內容
 
