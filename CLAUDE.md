@@ -1,7 +1,9 @@
 # zoo-release
 
 zoosewu 各專案共用的發布流程、更新機制、UI 與授權規範。本 repo 是工具，授權為 MIT（docs/LICENSING.md）。各專案用 `@v1` 引用這裡的可重用 workflow 與 `zoo-update` crate，
-並依 `docs/` 的規範實作。使用的 repo 列在 `scripts/repos.txt`。
+並依 `docs/` 的規範實作。使用的 repo 列在 `private/repos.txt`。
+
+**`private/` 不入庫**（.gitignore）：zoo-release 會給別人使用，維護者自己的腳本與清單（`setup_secrets.py`、`repos.txt`、`audit.py`）都放這裡，不要推上去，也不要在公開文件提到。
 
 ## 規則
 
@@ -19,9 +21,9 @@ zoosewu 各專案共用的發布流程、更新機制、UI 與授權規範。本
     1. `docs/ADOPTION.md` 的「目前的版本」與段落範本的標記加一。
     2. 在「變更紀錄」寫新版本與「專案要做的事」（只列必要動作）。
     3. 已完成的部分不要求重做。
-- **升版後一定要提醒使用者**：列出需要更新的專案（`py tools/audit.py` 中版本落後的），並給可以直接貼到各專案的一句話：
+- **升版後一定要提醒使用者**：列出需要更新的專案（`py private/audit.py` 中版本落後的），並給可以直接貼到各專案的一句話：
   「更新 zoo-release 規範（https://github.com/zoosewu/zoo-release/blob/main/docs/ADOPTION.md）」。提醒前確認已 push。
-- **使用者說各專案改完後一定要檢查**：`py tools/audit.py`（已 push 的話加 `--remote`），逐一回報通過與未通過的專案及原因。
+- **使用者說各專案改完後一定要檢查**：`py private/audit.py`（已 push 的話加 `--remote`），逐一回報通過與未通過的專案及原因。
   audit 只檢查設定與引用；UI 與更新行為要另外讀程式碼確認。
 
 ## 發布 zoo-release 本身
@@ -46,4 +48,4 @@ cd crates/zoo-update && cargo clippy --all-targets -- -D warnings && cargo test
 ## 簽章金鑰
 
 沿用 zoo-downloader 的金鑰（使用者 2026-11-27 確認保有私鑰與密碼），保存在 KeePassXC（docs/SIGNING.md）。
-私鑰與密碼只由使用者處理：需要設定 secrets 時請使用者執行 `uv run scripts/setup_secrets.py`，不要經手私鑰或密碼。
+私鑰與密碼只由使用者處理：需要設定 secrets 時請使用者執行 `uv run private/setup_secrets.py`，不要經手私鑰或密碼。

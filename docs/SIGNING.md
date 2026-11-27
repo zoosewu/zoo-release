@@ -41,30 +41,15 @@ npx --yes @tauri-apps/cli@2 signer generate -w "$HOME\.zoo-release\zoo.key"
 
 ## 3. 設定到各 repo
 
-個人帳號沒有跨 repo 共用的 secret，所以用腳本透過 GitHub REST API 一次設定（不需要 gh）。
+每個使用 zoo-release 發布的 repo 都要設定兩個 Actions secret（個人帳號沒有跨 repo 共用的 secret）：
 
-**準備**（第一次）：
+| Secret | 內容 |
+|---|---|
+| `ZOO_SIGNING_KEY` | 私鑰檔的內容 |
+| `ZOO_SIGNING_PASSWORD` | 私鑰的密碼 |
 
-1. 安裝 [uv](https://docs.astral.sh/uv/)。腳本需要的 PyNaCl（GitHub 要求 secret 先用 libsodium 加密）由 `uv run` 自動準備，不會裝進系統的 Python。
-2. GitHub 權限：腳本先用這台電腦 git 已登入的認證（Git Credential Manager）；沒有的話才詢問 token。需要自己建立 token 時：GitHub → Settings → Developer settings → Fine-grained tokens → Generate new token
-   - Repository access：Only select repositories，選 `scripts/repos.txt` 列出的 repo
-   - Permissions：**Secrets → Read and write**
-   - 期限設短（例如 7 天）；token 也存進 KeePassXC，或用完就刪。
-
-**設定**：
-
-```powershell
-# 直接讀 KeePassXC（需要 keepassxc-cli 在 PATH）：只詢問主密碼，私鑰取自項目附件、密碼取自密碼欄
-uv run scripts\setup_secrets.py --keepass <資料庫.kdbx>
-# 資料庫有金鑰檔時：--keepass-key-file <金鑰檔.keyx>
-# 項目或附件名稱不同時：--entry "<項目>" --attachment <附件檔名>
-# 只設定一個 repo：--repo zoosewu/z-overlay
-# 沒有已登入的 GitHub 認證時會再詢問 token；輸入都不會顯示
-```
-
-也可以在網頁手動設定：repo 的 Settings → Secrets and variables → Actions → New repository secret。
-
-新增專案時把 repo 加進 `scripts/repos.txt` 再執行一次。
+在網頁設定：repo 的 Settings → Secrets and variables → Actions → New repository secret。
+要一次設定多個 repo 時，可以用 GitHub REST API（[Create or update a repository secret](https://docs.github.com/en/rest/actions/secrets#create-or-update-a-repository-secret)，值要先用 libsodium 加密）。
 
 ## 4. 換金鑰
 

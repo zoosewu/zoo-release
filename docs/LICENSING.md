@@ -121,5 +121,5 @@ jobs:
 
 ## 6. 檢查
 
-`tools/audit.py` 的「C 授權」檢查產品 repo：`LICENSE` 是 AGPL-3.0、根目錄的套件設定檔是 `AGPL-3.0-only`、README 提到商業授權、CONTRIBUTING.md 有貢獻授權、PR 範本有勾選行、有使用 `contributor-license.yml`。
+產品 repo 要符合：`LICENSE` 是 AGPL-3.0、根目錄的套件設定檔是 `AGPL-3.0-only`、README 提到商業授權、CONTRIBUTING.md 有貢獻授權、PR 範本有勾選行、有使用 `contributor-license.yml`。
 分支保護的設定需要到 GitHub 確認。
