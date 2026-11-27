@@ -8,6 +8,7 @@ zoosewu 各專案共用的**發布流程、更新機制與 UI 規範**。
 | [docs/UPDATE.md](docs/UPDATE.md) | `latest.json`、檢查時機、提示規則、下載與驗證 |
 | [docs/UI.md](docs/UI.md) | 新版本橫幅、「關於」頁、用詞對照表 |
 | [docs/SIGNING.md](docs/SIGNING.md) | 共用簽章金鑰的保存、設定與輪替 |
+| [docs/LICENSING.md](docs/LICENSING.md) | 授權：產品 AGPL-3.0＋商業授權，函式庫與工具 MIT |
 | [docs/ADOPTION.md](docs/ADOPTION.md) | **各專案的接入步驟**（交給各專案的入口） |
 
 ## 內容
@@ -49,3 +50,7 @@ python -m unittest discover -s scripts      # 腳本測試
 cd crates/zoo-update && cargo test          # zoo-update 測試
 python tools/audit.py                       # 各專案接入狀態
 ```
+
+## 授權
+
+[MIT](LICENSE)

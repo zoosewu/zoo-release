@@ -7,7 +7,7 @@ zoo-release 是 zoosewu 各專案共用的發布流程、更新機制與 UI 規�
 
 ## 步驟
 
-分兩階段，可以分開進行、分開 commit。
+各階段可以分開進行、分開 commit。
 
 ### A. 發布流程
 
@@ -37,23 +37,33 @@ zoo-release 是 zoosewu 各專案共用的發布流程、更新機制與 UI 規�
 2. 照 [UI.md](UI.md) 實作主畫面橫幅與「關於」頁，用詞照第 3 節的表。
 3. 「關於」頁的「作者的其他專案」照 apex-code 的 API 指引實作。
 
-### C. 在本專案的 CLAUDE.md（或 AGENTS.md）加入這段
+### C. 授權
+
+照 [LICENSING.md](LICENSING.md)：產品用 AGPL-3.0（`AGPL-3.0-only`）＋商業授權，函式庫與工具用 MIT。
+
+1. `LICENSE` 放對應的全文；套件設定檔的 `license` 填 SPDX。
+2. 產品的 README 加上「授權」段落（含商業授權的說明）。
+3. 產品加上 CONTRIBUTING.md 的授權聲明。
+4. 授權和原本不同時（例如原本是 MIT），**先回報使用者，不要自行更改**：改授權需要確認所有貢獻者的同意。
+
+### D. 在本專案的 CLAUDE.md（或 AGENTS.md）加入這段
 
 **原文照貼，不要翻譯或改寫**，特別是標題那行：zoo-release 靠 `zoo-release: v1` 這個標記確認本專案依照哪一版。
 
 ```markdown
-## 發布與更新（zoo-release: v1）
+## 發布、更新與授權（zoo-release: v1）
 
-發布流程、更新機制與相關 UI 依 https://github.com/zoosewu/zoo-release 的規範：
+發布流程、更新機制、相關 UI 與授權依 https://github.com/zoosewu/zoo-release 的規範：
 - commit 使用慣例式提交；推 tag `vX.Y.Z` 發布（docs/RELEASE.md）
 - 更新檢查、提示與安裝（docs/UPDATE.md），新版本橫幅與「關於」頁（docs/UI.md）
+- 授權依 docs/LICENSING.md：產品 AGPL-3.0-only＋商業授權、函式庫與工具 MIT；加入 GPL／AGPL 的相依套件前先問使用者
 - 修改發布、更新或「關於」頁前先讀對應的規範，不要自行偏離；規範不適用時回報使用者
 - 使用者說「更新 zoo-release 規範」時：讀 docs/ADOPTION.md 的「變更紀錄」，只做從目前版本到最新版本列出的「專案要做的事」，最後把上面標題的版本號改成最新版
 ```
 
-### D. 回報
+### E. 回報
 
-- 完成了哪些階段（A、B、C）
+- 完成了哪些階段（A、B、C、D）
 - 測試 Release 的結果
 - 規範不適用或需要使用者決定的部分
 
@@ -67,4 +77,4 @@ zoo-release 是 zoosewu 各專案共用的發布流程、更新機制與 UI 規�
 
 ### v1（2026-11-27）
 
-首版。專案要做的事：上面的 A、B、C、D。
+首版。專案要做的事：上面的 A、B、C、D、E。

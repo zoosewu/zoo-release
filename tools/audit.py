@@ -1,4 +1,4 @@
-"""檢查各專案接入 zoo-release 的狀態（docs/ADOPTION.md 的 A、B、C）。只用標準函式庫。
+"""檢查各專案接入 zoo-release 的狀態（docs/ADOPTION.md 的 A、B、C、D）。只用標準函式庫。
 
 用法：
   python tools/audit.py            讀本機（scripts/repos.txt 的路徑，相對 zoo-release 的上層資料夾）
@@ -69,7 +69,7 @@ class Remote:
 
 def audit(src, kind: str) -> dict[str, list[str]]:
     files = src.files()
-    result = {"A 發布": [], "B 更新": [], "C 標記": []}
+    result = {"A 發布": [], "B 更新": [], "C 授權": [], "D 標記": []}
 
     # A：release workflow 使用共用的 workflow
     workflows = "\n".join(src.read(f) or "" for f in files if re.match(r"\.github/workflows/[^/]+\.ya?ml$", f))
@@ -97,15 +97,37 @@ def audit(src, kind: str) -> dict[str, list[str]]:
         if not any("releases/latest/download/latest.json" in (src.read(f) or "") for f in code):
             result["B 更新"].append("Go 程式沒有讀取 latest.json")
 
-    # C：CLAUDE.md／AGENTS.md 的版本標記
+    # C：授權（repos.txt 列的都是產品：AGPL-3.0-only＋商業授權，docs/LICENSING.md）
+    license_text = src.read("LICENSE") or ""
+    if "GNU AFFERO GENERAL PUBLIC LICENSE" not in license_text or "Version 3" not in license_text:
+        result["C 授權"].append("LICENSE 不是 AGPL-3.0 全文")
+    for f in manifests(files):
+        m = re.search(r'^\s*license\s*=\s*"([^"]+)"|"license"\s*:\s*"([^"]+)"', src.read(f) or "", re.M)
+        if m and (m[1] or m[2]) != "AGPL-3.0-only":
+            result["C 授權"].append(f"{f} 的 license 是 {m[1] or m[2]}")
+    readme = "\n".join(src.read(f) or "" for f in files if re.match(r"README(\.[\w-]+)?\.md$", f))
+    if not re.search(r"商業授權|commercial licen[cs]e", readme, re.I):
+        result["C 授權"].append("README 沒有提到商業授權")
+
+    # D：CLAUDE.md／AGENTS.md 的版本標記
     versions = []
     for name in ("CLAUDE.md", "AGENTS.md"):
         versions += [int(v) for v in MARKER.findall(src.read(name) or "")]
     if not versions:
-        result["C 標記"].append("CLAUDE.md / AGENTS.md 沒有 zoo-release 標記")
+        result["D 標記"].append("CLAUDE.md / AGENTS.md 沒有 zoo-release 標記")
     elif max(versions) < LATEST:
-        result["C 標記"].append(f"規範版本 v{max(versions)}，最新為 v{LATEST}")
+        result["D 標記"].append(f"規範版本 v{max(versions)}，最新為 v{LATEST}")
     return result
+
+
+# 產品本身的套件設定檔：深度 2 以內，不含附帶的工具、範例、測試與相依套件
+# （附帶的函式庫與工具可以用 MIT，docs/LICENSING.md 第 1 節）
+EXCLUDED = re.compile(r"(^|/)(tools|examples?|tests?|e2e|fixtures|node_modules|vendor|third_party)/")
+
+
+def manifests(files: list[str]) -> list[str]:
+    return [f for f in files
+            if re.search(r"(^|/)(Cargo\.toml|package\.json)$", f) and f.count("/") <= 2 and not EXCLUDED.search(f)]
 
 
 def main() -> int:

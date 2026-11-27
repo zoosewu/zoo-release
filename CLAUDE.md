@@ -1,6 +1,6 @@
 # zoo-release
 
-zoosewu 各專案共用的發布流程、更新機制與 UI 規範。各專案用 `@v1` 引用這裡的可重用 workflow 與 `zoo-update` crate，
+zoosewu 各專案共用的發布流程、更新機制、UI 與授權規範。本 repo 是工具，授權為 MIT（docs/LICENSING.md）。各專案用 `@v1` 引用這裡的可重用 workflow 與 `zoo-update` crate，
 並依 `docs/` 的規範實作。使用的 repo 列在 `scripts/repos.txt`。
 
 ## 規則

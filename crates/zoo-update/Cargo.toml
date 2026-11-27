@@ -3,6 +3,7 @@ name = "zoo-update"
 version = "1.0.0"
 edition = "2024"
 description = "zoosewu 各 app 共用的更新邏輯（docs/UPDATE.md）"
+license = "MIT"
 publish = false
 
 [dependencies]
