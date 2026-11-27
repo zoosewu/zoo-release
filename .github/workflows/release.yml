@@ -66,19 +66,19 @@ jobs:
           if [[ "$TAG" == *-* ]]; then echo "PRERELEASE=true" >> "$GITHUB_ENV"; else echo "PRERELEASE=false" >> "$GITHUB_ENV"; fi
           echo "VERSION=${TAG#v}" >> "$GITHUB_ENV"
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: 取得 zoo-release
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: zoosewu/zoo-release
           ref: ${{ inputs.zoo-release-ref }}
           path: .zoo-release
 
       - name: 收集檔案
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern: release-*
           merge-multiple: true

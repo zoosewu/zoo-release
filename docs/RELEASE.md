@@ -57,7 +57,7 @@ permissions:
 jobs:
   build:            # 專案自己的建置：測試、編譯、打包，把要發布的檔案上傳成 artifact
     ...
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v7
       with:
         name: release-windows      # 名稱以 release- 開頭
         path: dist/*
