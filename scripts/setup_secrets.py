@@ -1,3 +1,7 @@
+# /// script
+# requires-python = ">=3.9"
+# dependencies = ["pynacl"]
+# ///
 """把共用的簽章金鑰設定到 scripts/repos.txt 列出的每個 repo（docs/SIGNING.md）。
 
 直接呼叫 GitHub REST API，不需要 gh。設定兩個 secret：
@@ -5,10 +9,10 @@
   ZOO_SIGNING_PASSWORD  私鑰的密碼
 Token 與密碼在執行時詢問（輸入不顯示），不會出現在指令列或歷史紀錄。
 
-需要 PyNaCl：py -m pip install pynacl
+用 uv 執行（自動準備 PyNaCl，不會裝進系統的 Python）：
 
-  py scripts/setup_secrets.py --key-file "$env:TEMP\\zoo.key"
-  py scripts/setup_secrets.py --key-file "$env:TEMP\\zoo.key" --repo zoosewu/z-overlay
+  uv run scripts/setup_secrets.py --key-file "$env:TEMP\\zoo.key"
+  uv run scripts/setup_secrets.py --key-file "$env:TEMP\\zoo.key" --repo zoosewu/z-overlay
 """
 
 import argparse
@@ -61,7 +65,7 @@ def main():
     try:
         import nacl  # noqa: F401
     except ImportError:
-        sys.exit("缺少 PyNaCl：py -m pip install pynacl")
+        sys.exit("缺少 PyNaCl：改用 uv run scripts/setup_secrets.py 執行")
 
     with open(args.key_file, encoding="utf-8") as f:
         key = f.read().strip()
