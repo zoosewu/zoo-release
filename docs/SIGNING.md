@@ -46,7 +46,7 @@ npx --yes @tauri-apps/cli@2 signer generate -w "$HOME\.zoo-release\zoo.key"
 **準備**（第一次）：
 
 1. 安裝 [uv](https://docs.astral.sh/uv/)。腳本需要的 PyNaCl（GitHub 要求 secret 先用 libsodium 加密）由 `uv run` 自動準備，不會裝進系統的 Python。
-2. 建立 token：GitHub → Settings → Developer settings → Fine-grained tokens → Generate new token
+2. GitHub 權限：腳本先用這台電腦 git 已登入的認證（Git Credential Manager）；沒有的話才詢問 token。需要自己建立 token 時：GitHub → Settings → Developer settings → Fine-grained tokens → Generate new token
    - Repository access：Only select repositories，選 `scripts/repos.txt` 列出的 repo
    - Permissions：**Secrets → Read and write**
    - 期限設短（例如 7 天）；token 也存進 KeePassXC，或用完就刪。
@@ -56,7 +56,7 @@ npx --yes @tauri-apps/cli@2 signer generate -w "$HOME\.zoo-release\zoo.key"
 ```powershell
 # 1. 從 KeePassXC 把私鑰附加檔案匯出到暫存資料夾，例如 $env:TEMP\zoo.key
 uv run scripts\setup_secrets.py --key-file "$env:TEMP\zoo.key"
-# 2. 依提示貼上 token 與私鑰密碼（輸入不會顯示），設定到 scripts/repos.txt 列出的每個 repo
+# 2. 依提示貼上私鑰密碼（沒有已登入的認證時也會詢問 token）（輸入不會顯示），設定到 scripts/repos.txt 列出的每個 repo
 Remove-Item "$env:TEMP\zoo.key"
 # 只設定一個 repo：加上 --repo zoosewu/z-overlay
 ```

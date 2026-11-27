@@ -7,7 +7,8 @@
 直接呼叫 GitHub REST API，不需要 gh。設定兩個 secret：
   ZOO_SIGNING_KEY       私鑰檔的內容
   ZOO_SIGNING_PASSWORD  私鑰的密碼
-Token 與密碼在執行時詢問（輸入不顯示），不會出現在指令列或歷史紀錄。
+GitHub 權限依序用：環境變數 GITHUB_TOKEN → git 已登入的認證（Git Credential Manager）→ 執行時詢問 token。
+私鑰密碼在執行時詢問（輸入不顯示），不會出現在指令列或歷史紀錄。
 
 用 uv 執行（自動準備 PyNaCl，不會裝進系統的 Python）：
 
@@ -20,6 +21,7 @@ import base64
 import getpass
 import json
 import os
+import subprocess
 import sys
 import urllib.error
 import urllib.request
@@ -49,6 +51,25 @@ def request(method, url, token, body=None):
         return json.loads(data) if data else None
 
 
+def git_credential_token():
+    """從 git 的認證管理員（Git Credential Manager）取得已登入的 GitHub token；沒有就回傳 None。"""
+    try:
+        r = subprocess.run(
+            ["git", "credential", "fill"],
+            input="protocol=https\nhost=github.com\n\n",
+            capture_output=True,
+            text=True,
+            env={**os.environ, "GIT_TERMINAL_PROMPT": "0"},
+            timeout=300,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    for line in r.stdout.splitlines():
+        if line.startswith("password="):
+            return line[len("password="):] or None
+    return None
+
+
 def encrypt(public_key, value):
     from nacl.public import PublicKey, SealedBox
 
@@ -67,13 +88,19 @@ def main():
     except ImportError:
         sys.exit("缺少 PyNaCl：改用 uv run scripts/setup_secrets.py 執行")
 
+    if not os.path.isfile(args.key_file):
+        sys.exit(f"找不到私鑰檔：{os.path.abspath(args.key_file)}")
     with open(args.key_file, encoding="utf-8") as f:
         key = f.read().strip()
     if not key:
         sys.exit(f"私鑰檔是空的：{args.key_file}")
 
     repos = [args.repo] if args.repo else load_repos(os.path.join(os.path.dirname(__file__), "repos.txt"))
-    token = getpass.getpass("GitHub token（Secrets 讀寫權限）：").strip()
+    token = os.environ.get("GITHUB_TOKEN") or git_credential_token()
+    if token:
+        print("使用這台電腦已登入的 GitHub 權限")
+    else:
+        token = getpass.getpass("GitHub token（Secrets 讀寫權限）：").strip()
     password = getpass.getpass("私鑰密碼：")
 
     secrets = {"ZOO_SIGNING_KEY": key, "ZOO_SIGNING_PASSWORD": password}
