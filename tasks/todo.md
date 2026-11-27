@@ -27,10 +27,11 @@ zoosewu 各專案共用的發布流程、更新機制與 UI 規範（GitHub：`z
 ## 待辦
 - [x] 授權：zoo-release 與 zoo-update 用 MIT；docs/LICENSING.md（產品 AGPL-3.0-only＋商業授權、函式庫與工具 MIT）；ADOPTION 加入 C 授權；audit 檢查
 - [ ] waypoint 沒有 LICENSE、package.json 是 MIT：改 AGPL 前要使用者確認原作者（I321I）的程式碼權利
-- [ ] 使用者確認 zoo-downloader 的私鑰與密碼仍在（keys.rs 沿用它的公鑰），存進密碼管理器
+- [x] 沿用 zoo-downloader 的金鑰；保存在 KeePassXC（docs/SIGNING.md）
 - [ ] 執行 scripts/setup-secrets.ps1
 - [ ] push、建立 v1.0.0 與 v1 tag
-- [ ] 第一個接入的專案用 publish: false 實測 release.yml
+- [ ] 第一個接入的專案用 publish: false 實測 release.yml（z-overlay）
+- [x] 所有 PR 都要同意貢獻授權（contributor-license.yml）
 
 ## 限制
 - 可重用 workflow 無法在本機執行，第一個接入的專案用 `publish: false`（只建草稿）實測

@@ -43,6 +43,7 @@ cd crates/zoo-update && cargo clippy --all-targets -- -D warnings && cargo test
 
 可重用 workflow 無法在本機執行：改動後在一個專案用 `publish: false` 推測試 tag 驗證，確認草稿內容後刪掉草稿與 tag。
 
-## 已知待確認
+## 簽章金鑰
 
-- `crates/zoo-update/src/keys.rs` 的 `CURRENT` 沿用 zoo-downloader 的公鑰：使用者需確認仍保有對應的私鑰與密碼（docs/SIGNING.md 第 1 節）。若改用新金鑰，同時更新 `keys.rs` 與 zoo-downloader 的 `tauri.conf.json`。
+沿用 zoo-downloader 的金鑰（使用者 2026-11-27 確認保有私鑰與密碼），保存在 KeePassXC（docs/SIGNING.md）。
+私鑰與密碼只由使用者處理：需要設定 secrets 時請使用者執行 `scripts/setup-secrets.ps1`，不要經手私鑰或密碼。
