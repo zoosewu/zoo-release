@@ -3,7 +3,7 @@
   把共用的簽章金鑰設定到 scripts/repos.txt 列出的每個 repo（docs/SIGNING.md）。
 
 .DESCRIPTION
-  設定兩個 secret：TAURI_SIGNING_PRIVATE_KEY（私鑰檔的內容）與 TAURI_SIGNING_PRIVATE_KEY_PASSWORD。
+  設定兩個 secret：ZOO_SIGNING_KEY（私鑰檔的內容）與 ZOO_SIGNING_PASSWORD（舊名稱 TAURI_SIGNING_* 仍可使用）。
   需要 GitHub CLI（gh）並已登入。密碼在執行時詢問，不會出現在指令列或歷史紀錄。
 
 .EXAMPLE
@@ -36,10 +36,10 @@ try {
   foreach ($r in $repos) {
     Write-Host "設定 $r"
     # 從標準輸入傳值，避免出現在處理序的命令列
-    $key | gh secret set TAURI_SIGNING_PRIVATE_KEY --repo $r
-    if ($LASTEXITCODE -ne 0) { throw "$r：設定 TAURI_SIGNING_PRIVATE_KEY 失敗" }
-    $password | gh secret set TAURI_SIGNING_PRIVATE_KEY_PASSWORD --repo $r
-    if ($LASTEXITCODE -ne 0) { throw "$r：設定 TAURI_SIGNING_PRIVATE_KEY_PASSWORD 失敗" }
+    $key | gh secret set ZOO_SIGNING_KEY --repo $r
+    if ($LASTEXITCODE -ne 0) { throw "$r：設定 ZOO_SIGNING_KEY 失敗" }
+    $password | gh secret set ZOO_SIGNING_PASSWORD --repo $r
+    if ($LASTEXITCODE -ne 0) { throw "$r：設定 ZOO_SIGNING_PASSWORD 失敗" }
   }
   Write-Host "完成：$($repos.Count) 個 repo"
 } finally {

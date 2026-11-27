@@ -28,10 +28,10 @@ npx --yes @tauri-apps/cli@2 signer generate -w "$HOME\.zoo-release\zoo.key"
 
 | 項目 | 放哪裡 |
 |---|---|
-| 私鑰 | KeePassXC 的項目「zoo-release 簽章金鑰」：私鑰檔加為**附加檔案**，同時把內容貼在備註（方便複製） |
+| 私鑰 | KeePassXC 的項目「zoo-release 簽章金鑰」：私鑰檔加為**附加檔案**，同時把內容貼在**受保護的附加屬性** `private_key`（方便複製，畫面上隱藏；不要貼在備註，備註會明文顯示） |
 | 密碼 | 同一個項目的密碼欄 |
 | 公鑰 | 公開。同一個項目的備註，並寫在 `crates/zoo-update/src/keys.rs` 與各 Tauri app 的設定 |
-| GitHub | 各 repo 的 secret `TAURI_SIGNING_PRIVATE_KEY`、`TAURI_SIGNING_PRIVATE_KEY_PASSWORD`（設定後讀不回來） |
+| GitHub | 各 repo 的 secret `ZOO_SIGNING_KEY`、`ZOO_SIGNING_PASSWORD`（設定後讀不回來；舊名稱 `TAURI_SIGNING_*` 仍可使用） |
 
 **KeePassXC 資料庫是私鑰唯一能取回的地方**，所以：
 

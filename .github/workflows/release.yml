@@ -31,9 +31,17 @@ on:
         type: string
         default: v1
     secrets:
+      ZOO_SIGNING_KEY:
+        description: 簽章私鑰檔的內容（docs/SIGNING.md）
+        required: false
+      ZOO_SIGNING_PASSWORD:
+        description: 簽章私鑰的密碼
+        required: false
       TAURI_SIGNING_PRIVATE_KEY:
+        description: 舊名稱，沒有 ZOO_SIGNING_KEY 時使用
         required: false
       TAURI_SIGNING_PRIVATE_KEY_PASSWORD:
+        description: 舊名稱，沒有 ZOO_SIGNING_PASSWORD 時使用
         required: false
 
 permissions:
@@ -94,8 +102,8 @@ jobs:
 
       - name: 簽章
         env:
-          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
-          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.ZOO_SIGNING_KEY || secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.ZOO_SIGNING_PASSWORD || secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         run: |
           # 先存成變數：platforms 對不到檔案時在這裡就失敗
           list=$(python3 .zoo-release/scripts/manifest.py --repo "$GITHUB_REPOSITORY" --tag "$TAG" \
@@ -106,7 +114,7 @@ jobs:
           for f in "${assets[@]}"; do [[ -f "$f.sig" ]] || unsigned+=("$f"); done
           if (( ${#unsigned[@]} == 0 )); then echo "沒有需要簽章的檔案"; exit 0; fi
           if [[ -z "$TAURI_SIGNING_PRIVATE_KEY" ]]; then
-            echo "::error::缺少 secret TAURI_SIGNING_PRIVATE_KEY：呼叫端要加上 secrets: inherit，並用 zoo-release 的 scripts/setup-secrets.ps1 設定（docs/SIGNING.md）"
+            echo "::error::缺少 secret ZOO_SIGNING_KEY：呼叫端要加上 secrets: inherit，並用 zoo-release 的 scripts/setup-secrets.ps1 設定（docs/SIGNING.md）"
             exit 1
           fi
           for f in "${unsigned[@]}"; do
