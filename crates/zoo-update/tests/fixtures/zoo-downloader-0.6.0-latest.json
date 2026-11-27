@@ -1,0 +1,23 @@
+{
+  "version": "0.6.0",
+  "notes": "### macOS：第一次打開 / Opening on macOS for the first time\n\nApp 還沒有經過 Apple 公證，第一次打開時 macOS 會說無法驗證它。拖進「應用程式」後擇一：\n- 開一次 app，按「完成」；到「系統設定 → 隱私權與安全性」，按「已阻擋 zoo-downloader」旁的「強制打開」，輸入密碼後再開一次。\n- 或在終端機執行 `xattr -dr com.apple.quarantine /Applications/zoo-downloader.app`\n\nThe app is not notarized by Apple yet, so macOS says it cannot verify it. After dragging it to Applications, either:\n- Open it once and click Done; then in System Settings → Privacy & Security, click Open Anyway next to \"zoo-downloader was blocked\", enter your password and open it again.\n- Or run `xattr -dr com.apple.quarantine /Applications/zoo-downloader.app` in Terminal.\n\n---\n\n\n\n**Full Changelog**: https://github.com/zoosewu/zoo-downloader/compare/v0.5.0...v0.6.0",
+  "pub_date": "2026-11-27T03:35:10.212Z",
+  "platforms": {
+    "windows-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSZ2ZBYWZ1K0FjYmVUVFU4ekpmaUl2aVNhVGxPTUNxTDdrQ3pMQnZlKzlEV3BjRHFPT3NXdWdtUi9TK2dHSktvSURFeHFhNkk0V0FKNjlRaFpwM2VzcmJnUUVxL1FQTkFNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzk1NzUwMDUzCWZpbGU6em9vLWRvd25sb2FkZXJfMC42LjBfeDY0LXNldHVwLmV4ZQl2ZXJzaW9uOjAuNi4wCnZseVl3NjIxRlJaSDlGazBYRFVPd3Y5Y0EreWk1S2pPTDE4ODRJWVpMZUVUZEg1VkVZcVk5LzBOanZQMVMwTlFuSFhhdWpjbDRYdlhSVzIvK0UvWUFRPT0K",
+      "url": "https://github.com/zoosewu/zoo-downloader/releases/download/v0.6.0/zoo-downloader_0.6.0_x64-setup.exe"
+    },
+    "darwin-aarch64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSZ2ZBYWZ1K0FjYmI5ZUNBYW43NStBMGw2RHh2M0NKQTJwNHRyanVZWHFNMStwbkZCc2pkc0VDbWxmbFdZS3RtWDZEVmJlZThjU1NNRW5IMW1od2hCR0NLSE8ySkVtR1FNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzk1NzQ5ODEwCWZpbGU6em9vLWRvd25sb2FkZXIuYXBwLnRhci5negl2ZXJzaW9uOjAuNi4wCkdZbmZHT0JhOVNMRlJjay9tUjA1a3NWRTBNVGxtODNTQ3NRNWdPcTM2MmFzVUwzSFJKd3Zwb0FURG91Y005VGxFYUZ0ZDlJOGdCeXJTLzlVQklJa0JBPT0K",
+      "url": "https://github.com/zoosewu/zoo-downloader/releases/download/v0.6.0/zoo-downloader_0.6.0_aarch64.app.tar.gz"
+    },
+    "darwin-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSZ2ZBYWZ1K0FjYmZFN3hLWEcvSDJlQTBYd2RJUTQycUpURUF0dWJBYmlRa3haUXJqODdoOVFVOU1ldndCeVE1WGFZQTBaUS9BZU5Hbm9RcTRVSWtBV2IxNmF0Y2hGVHc4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzk1NzUwMzI2CWZpbGU6em9vLWRvd25sb2FkZXIuYXBwLnRhci5negl2ZXJzaW9uOjAuNi4wCjl4UVN3NUR1a0p3c0tDcURzY0hzY20rUmQ4T1JoU2c5cGt2SUVTU1RRYTlxSGRZT1psREMyN0k5aVRYS0pSUmpyVWoxZXE1cmJIUXNHVUo5a0dvQUFBPT0K",
+      "url": "https://github.com/zoosewu/zoo-downloader/releases/download/v0.6.0/zoo-downloader_0.6.0_x64.app.tar.gz"
+    },
+    "linux-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSZ2ZBYWZ1K0FjYlM0L3grenFsQjhKZWVIRkRkaXRwSTJGSlZMUE51Ymd2QTNXZTlZbkc2dXpYNEVnb1pVall2R09HU0pRbjRXTDlYYVhRa3ZVVE0xZlYzQnpId3lIdUFjPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzk1NzQ5NzU4CWZpbGU6em9vLWRvd25sb2FkZXJfMC42LjBfYW1kNjQuQXBwSW1hZ2UJdmVyc2lvbjowLjYuMApjU3BQUUExdjJNK0ZvdTVpSE5pTXdhK2Q4WGxLQVVYVlZoSCttNFhBTElRSEhMZ21lWGNpV0lXV1NUS3V3elBpWGJjTit0ckRkSGlCaHBSU1ZRcXBCZz09Cg==",
+      "url": "https://github.com/zoosewu/zoo-downloader/releases/download/v0.6.0/zoo-downloader_0.6.0_amd64.AppImage"
+    }
+  }
+}
