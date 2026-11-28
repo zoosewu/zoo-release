@@ -116,8 +116,34 @@ jobs:
 ```
 
 - PR 說明裡的勾選行沒有打勾時檢查失敗。repo 擁有者與機器人（Dependabot、release-please 等）的 PR 自動通過。
-- 在 repo 設定的分支保護（Settings → Branches）把 `contributor-license / agreement` 設為必要檢查，沒有同意就無法合併。
+- 設為必要檢查後，沒有同意就無法合併，見 5.4。
 - 勾選紀錄留在 PR 上；合併後不要改動 PR 說明。
+
+### 5.4 設為必要檢查
+
+GitHub 的檢查清單只列出**最近 7 天在這個 repo 跑過**的檢查，所以要先讓檢查跑一次，才選得到。
+
+**1. 觸發檢查（由專案的 agent 做）**：`contributor-license.yml` push 到預設分支後，開一個沒有檔案變更的測試 PR。
+
+```sh
+git switch -c chore/contributor-license-check
+git commit --allow-empty -m "chore: 觸發貢獻授權檢查"
+git push -u origin chore/contributor-license-check
+# 用 gh 或 GitHub API 開 PR 到預設分支；作者是 repo 擁有者，檢查會自動通過
+```
+
+確認檢查通過後，**關閉 PR（不合併）並刪除分支**。
+
+**2. 設定 ruleset（由使用者做）**：Settings → Rules → Rulesets → New ruleset → New branch ruleset
+
+1. **Ruleset name** 填 `main`，**Enforcement status** 選 **Active**。
+2. **Bypass list** 加入 **Repository admin**（Always allow）：必要檢查會擋住所有沒跑過檢查的 commit，包括直接 push 到預設分支；這個檢查只在 PR 上跑，不加例外的話擁有者也不能直接 push。
+3. **Target branches** → **Add target** → **Include default branch**。
+4. 勾 **Require status checks to pass** → **Add checks**，搜尋 `agreement`，選 **`agreement / agreement`**。
+   名稱是「呼叫端的 job 名稱 / reusable workflow 的 job 名稱」，不是 workflow 檔名。
+5. 按 **Create**。
+
+超過 7 天才設定、清單裡找不到時，再做一次步驟 1。
 
 ## 6. 檢查
 

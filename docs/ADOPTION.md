@@ -47,7 +47,8 @@ zoo-release 是 zoosewu 各專案共用的發布流程、更新機制與 UI 規�
    - `CONTRIBUTING.md` 放貢獻授權條款（已有 CONTRIBUTING.md 的話加一節）。
    - `.github/pull_request_template.md` 加上同意勾選行（已有 PR 範本的話加一行）。
    - `.github/workflows/contributor-license.yml` 引用 `contributor-license.yml@v1`。
-   - 回報時提醒使用者到 repo 設定把 `contributor-license / agreement` 設為必要檢查。
+   - push 到預設分支後，照 LICENSING.md 5.4 開一個沒有變更的測試 PR 觸發檢查，通過後關閉（不合併）並刪除分支。
+   - 回報時請使用者照 LICENSING.md 5.4 設定 ruleset，把 `agreement / agreement` 設為必要檢查（7 天內要設定，否則清單裡選不到）。
 4. 授權和原本不同時（例如原本是 MIT），**先回報使用者，不要自行更改**：改授權需要確認所有貢獻者的同意。
 
 ### D. 在本專案的 CLAUDE.md（或 AGENTS.md）加入這段
